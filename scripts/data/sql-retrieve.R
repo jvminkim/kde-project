@@ -10,4 +10,6 @@ con = dbConnect(
   password = Sys.getenv("PGPASSWORD")
 )
 
-statcast_data = dbGetQuery(con, "SELECT * FROM statcast_all;")
+statcast_data = dbGetQuery(con, "SELECT * FROM statcast_all
+                                 WHERE hc_y IS NOT NULL AND
+                                       hc_x IS NOT NULL;")

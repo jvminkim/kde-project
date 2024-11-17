@@ -1,4 +1,4 @@
-list_of_packages_viz = c("GeomMLBStadiums", "ggplot2", "dplyr", "wesanderson")
+list_of_packages_viz = c("GeomMLBStadiums", "ggplot2", "dplyr", "wesanderson", "plotly")
 lapply(list_of_packages_viz, library, character.only=TRUE)
 
 #Transform hc_x, hc_y into x,y coordinates
@@ -15,14 +15,14 @@ statcast_data = dplyr::mutate(statcast_data, x_land = hc_x - 125.42, y_land = 19
 
 hitting_palette = wes_palette("Zissou1", 5, type = "continuous")
 
-ggplot(data = shohei_ohtani_hitting, aes(x = hc_x_ , y = hc_y_)) +
-  #geom_point() +
+z_breaks = c(sapply(seq(0.10, 0.90, by = 0.10), find_cut, df = df), max(df$z) + 0.01)
+
+ggplot(data = shohei_ohtani_hitting, aes(x = hc_x_, y = hc_y_)) +
   facet_wrap(~stand) +
-  geom_density_2d_filled(aes(fill = after_stat(level)),alpha = 0.6, bins = 15) +
-  scale_fill_brewer(palette = "Reds") +
+  geom_density_2d_filled(aes(fill = after_stat(level)), bins = 9) +
+  scale_fill_brewer(palette = "Oranges", direction = 1) +
   geom_spray_chart +
   theme_bw()
-
 
 statcast_data = GeomMLBStadiums::mlbam_xy_transformation(statcast_data)
 shohei_ohtani_hitting = dplyr::filter(statcast_data, batter == "660271")
